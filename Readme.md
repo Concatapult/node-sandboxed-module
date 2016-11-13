@@ -52,6 +52,18 @@ using the same options that were used for the original sandboxed module.
 * `sourceTransformersSingleOnly:` If false, the source transformers will not be run against
 modules required by the sandboxed module. By default it will take the same value as
 `singleOnly`.
+* `resolvePath:` A function that intercepts a `require` statement. The function receives
+two parameters, `path` and `resolve`, and should return a resolved path, or `null` to ignore
+the module. Example:
+
+```js
+var virtualFoo = SandboxedModule.require('idontexist', {
+  resolvePath: function (path, resolve, requiredFromPath) {
+    assert.strictEqual(path, 'idontexist');
+    return resolve('../fixture/foo'); // Resolve a different file instead
+  }
+});
+```
 
 ### SandboxedModule.require(moduleId, [options])
 
